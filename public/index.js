@@ -10,10 +10,23 @@ class Message {
     this.Element = this.Div()
   }
 
+  Pfp () {
+    var e = document.createElement('img')
+    e.src = `https://cdn.discordapp.com/avatars/${this.Author.id}/${this.Author.avatar}.webp?size=128`
+    return e
+  }
+
+  Text () {
+    var e = document.createElement('p')
+    e.innerHTML = `${this.Author.username}:${this.Content}`
+    return e
+  }
+
   Div () {
     var e = document.createElement('div')
     e.classList.add('message')
-    e.innerHTML = `${this.Author.username}:${this.Content}`
+    e.append(this.Pfp())
+    e.append(this.Text())
     return e
   }
 }
@@ -26,11 +39,24 @@ class Channel {
     this.Element = this.Div()
   }
 
+  Marker () {
+    var e = document.createElement('img')
+    e.src = this.Type == 0 ? 'svg/hashtag.svg' : 'svg/speaker.svg'
+    return e
+  }
+
+  Text () {
+    var e = document.createElement('p')
+    e.innerHTML = this.Name
+    return e
+  }
+
   Div () {
     var e = document.createElement('div')
     e.classList.add('channel')
-    e.innerHTML = this.Name
     e.onclick = this.loadMessages.bind(this)
+    e.append(this.Marker())
+    e.append(this.Text())
     return e
   }
 
@@ -43,6 +69,7 @@ class Channel {
       var message = new Message(m)
       document.getElementById('messages').append(message.Element)
     }
+    document.getElementById('messages').scrollBy(0, 1000)
   }
 }
 class Guild {
@@ -72,9 +99,10 @@ class Guild {
   }
 }
 
-document.onkeypress = function (e) {
+document.onkeypress = async function (e) {
   if (e.key == 'Enter') {
-    sendGO(state, messageInput.value)
+    await sendGO(state, messageInput.value)
+    messageInput.value = ''
     refresh()
   }
 }

@@ -51,11 +51,13 @@ func main() {
 		return messages
 	})
 
-	ui.Bind("sendGO", func( id,content string) {
+	ui.Bind("sendGO", func( id,content string) bool {
 		_,err := Client.ChannelMessageSend(id, content)
 		if err != nil {
 			fmt.Println(err)
+			return false
 		}
+		return true
 	})
 
 	loadDiscord()
