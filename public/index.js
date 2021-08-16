@@ -2,6 +2,18 @@ var messageInput = document.getElementById('messageInput')
 var state // channel id
 var refresh // reload messages
 
+class Voice {
+  constructor (channel) {
+    this.Element = Div()
+  }
+
+  Div () {
+    var e = document.createElement('div')
+    e.classList.add('voice')
+    return e
+  }
+}
+
 class Message {
   constructor (go) {
     this.ID = go.id
@@ -18,7 +30,7 @@ class Message {
 
   Text () {
     var e = document.createElement('p')
-    e.innerHTML = `${this.Author.username}:${this.Content}`
+    e.innerHTML = `${this.Author.username} : ${this.Content}`
     return e
   }
 
@@ -63,13 +75,13 @@ class Channel {
   async loadMessages () {
     state = this.ID
     refresh = this.loadMessages.bind(this)
-    document.getElementById('messages').innerHTML = ''
     var messages = await messagesGO(this.ID)
+    document.getElementById('messages').innerHTML = ''
     for (let m of messages) {
       var message = new Message(m)
       document.getElementById('messages').append(message.Element)
     }
-    document.getElementById('messages').scrollBy(0, 1000)
+    document.getElementById('messages').scrollBy(0, 10000)
   }
 }
 class Guild {
@@ -112,5 +124,9 @@ document.onkeypress = async function (e) {
     var guild = new Guild(g)
     document.getElementById('guilds').append(guild.Element)
   }
-  setInterval(refresh, 5000)
+  setInterval(callRefresh, 5000)
 })()
+
+function callRefresh () {
+  refresh()
+}

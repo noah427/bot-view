@@ -23,3 +23,4 @@ func loadDiscord(){
 		fmt.Println(err)
 	}
 }
+
