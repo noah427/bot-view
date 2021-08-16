@@ -19,26 +19,58 @@ class Message {
     this.ID = go.id
     this.Content = go.content
     this.Author = go.author
+    if (go.attachments.length > 0) {
+      this.attachment = go.attachments[0].url
+    } else {
+      this.attachment = null
+    }
     this.Element = this.Div()
   }
 
   Pfp () {
     var e = document.createElement('img')
+    e.classList.add("pfp")
     e.src = `https://cdn.discordapp.com/avatars/${this.Author.id}/${this.Author.avatar}.webp?size=128`
     return e
   }
 
-  Text () {
+
+  Image(){
+    var e = document.createElement("img")
+    e.classList.add("attachment")
+    e.src = this.attachment
+
+    return e
+  }
+
+  Username(){
     var e = document.createElement('p')
-    e.innerHTML = `${this.Author.username} : ${this.Content}`
+    e.innerHTML = `${this.Author.username} : `
+    return e
+  }
+
+  Text(){
+    var e = document.createElement('p')
+    e.innerHTML = this.Content
+    return e
+  }
+
+  UserInfo(){
+    var e = document.createElement('div')
+    e.classList.add("userinfo")
+    e.append(this.Pfp())
+    e.append(this.Username())
     return e
   }
 
   Div () {
     var e = document.createElement('div')
     e.classList.add('message')
-    e.append(this.Pfp())
+    e.append(this.UserInfo())
     e.append(this.Text())
+    if (this.attachment != null) {
+      e.append(this.Image())
+    }
     return e
   }
 }
