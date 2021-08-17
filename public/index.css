@@ -141,3 +141,20 @@ html {
   padding-top: 1vh;
   padding-bottom: 1vh;
 }
+
+.voice {
+  width: 50vw;
+  height: 50vh;
+  background-color: #2c2d30;
+  display: flex;
+  margin-top: 20vh;
+}
+
+.disconnect {
+  width: 50%;
+  height: 50%;
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+  background-color: #23272a;
+}

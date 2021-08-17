@@ -35,6 +35,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
+		
 		return channels
 	})
 
@@ -51,8 +52,8 @@ func main() {
 		return messages
 	})
 
-	ui.Bind("sendGO", func( id,content string) bool {
-		_,err := Client.ChannelMessageSend(id, content)
+	ui.Bind("sendGO", func(id, content string) bool {
+		_, err := Client.ChannelMessageSend(id, content)
 		if err != nil {
 			fmt.Println(err)
 			return false
@@ -60,9 +61,14 @@ func main() {
 		return true
 	})
 
-	loadDiscord()
+	ui.Bind("joinVoiceGO", joinVoice)
+	ui.Bind("disconnectVoiceGO",disconnectVoice)
 
-	ui.Load("http://127.0.0.1:4242/public")
+	if !loadDiscord() {
+		ui.Load("http://127.0.0.1:4242/public/login")
+	} else {
+		ui.Load("http://127.0.0.1:4242/public")
+	}
 
 	<-ui.Done()
 	Client.Close()

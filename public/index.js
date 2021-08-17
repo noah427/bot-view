@@ -4,13 +4,27 @@ var refresh // reload messages
 
 class Voice {
   constructor (channel) {
-    this.Element = Div()
+    this.Element = this.Div()
   }
 
   Div () {
     var e = document.createElement('div')
     e.classList.add('voice')
+    e.append(this.DisconnectButton())
     return e
+  }
+
+  DisconnectButton () {
+    var e = document.createElement('div')
+    e.classList.add('disconnect')
+    e.innerHTML = 'Disconnect'
+    e.onclick = this.Disconnect.bind(this)
+    return e
+  }
+
+  async Disconnect () {
+    await disconnectVoiceGO()
+    document.getElementById('messages').innerHTML = ''
   }
 }
 
@@ -29,35 +43,34 @@ class Message {
 
   Pfp () {
     var e = document.createElement('img')
-    e.classList.add("pfp")
+    e.classList.add('pfp')
     e.src = `https://cdn.discordapp.com/avatars/${this.Author.id}/${this.Author.avatar}.webp?size=128`
     return e
   }
 
-
-  Image(){
-    var e = document.createElement("img")
-    e.classList.add("attachment")
+  Image () {
+    var e = document.createElement('img')
+    e.classList.add('attachment')
     e.src = this.attachment
 
     return e
   }
 
-  Username(){
+  Username () {
     var e = document.createElement('p')
     e.innerHTML = `${this.Author.username} : `
     return e
   }
 
-  Text(){
+  Text () {
     var e = document.createElement('p')
     e.innerHTML = this.Content
     return e
   }
 
-  UserInfo(){
+  UserInfo () {
     var e = document.createElement('div')
-    e.classList.add("userinfo")
+    e.classList.add('userinfo')
     e.append(this.Pfp())
     e.append(this.Username())
     return e
@@ -80,6 +93,7 @@ class Channel {
     this.ID = go.id
     this.Name = go.name
     this.Type = go.type
+    this.Guild = go.guild_id
     this.Element = this.Div()
   }
 
@@ -98,10 +112,19 @@ class Channel {
   Div () {
     var e = document.createElement('div')
     e.classList.add('channel')
-    e.onclick = this.loadMessages.bind(this)
+    e.onclick =
+      this.Type == 0 ? this.loadMessages.bind(this) : this.loadVoice.bind(this)
     e.append(this.Marker())
     e.append(this.Text())
     return e
+  }
+
+  async loadVoice () {
+    console.log(this.Guild, this.ID)
+    await joinVoiceGO(this.Guild, this.ID)
+    document.getElementById('messages').innerHTML = ''
+    var voice = new Voice(this)
+    document.getElementById('messages').append(voice.Element)
   }
 
   async loadMessages () {
@@ -160,5 +183,5 @@ document.onkeypress = async function (e) {
 })()
 
 function callRefresh () {
-  refresh()
+  state ? refresh() : undefined
 }
