@@ -3,23 +3,53 @@ var state // channel id
 var refresh // reload messages
 
 class Voice {
-  constructor (channel) {
-    this.Element = this.Div()
+ constructor (channel) {
+    
   }
 
-  Div () {
+  async buildElement(){
+    this.Element = await this.Div()
+  }
+
+  async Div () {
     var e = document.createElement('div')
     e.classList.add('voice')
     e.append(this.DisconnectButton())
+    e.append(await this.Dropdown())
     return e
   }
 
   DisconnectButton () {
     var e = document.createElement('div')
     e.classList.add('disconnect')
-    e.innerHTML = 'Disconnect'
+    var text = document.createElement('p')
+    text.innerHTML = 'Disconnect'
+    e.append(text)
     e.onclick = this.Disconnect.bind(this)
     return e
+  }
+
+  DropdownItem (filename) {
+    var e = document.createElement('option')
+    e.value = filename
+    e.innerHTML = filename
+    return e
+  }
+
+  async Dropdown () {
+    var e = document.createElement('select')
+    var names = await displayFilesGO()
+    e.id = "audioSelector"
+    for (let name of names) {
+      e.append(this.DropdownItem(name))
+    }
+    e.onchange = this.ReadFile.bind(this)
+    this.Selector = e
+    return e
+  }
+
+  ReadFile () {
+    recieveFileGO(`./audio/${this.Selector.value}`)
   }
 
   async Disconnect () {
@@ -120,10 +150,10 @@ class Channel {
   }
 
   async loadVoice () {
-    console.log(this.Guild, this.ID)
     await joinVoiceGO(this.Guild, this.ID)
     document.getElementById('messages').innerHTML = ''
     var voice = new Voice(this)
+    await voice.buildElement()
     document.getElementById('messages').append(voice.Element)
   }
 

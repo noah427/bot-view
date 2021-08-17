@@ -63,6 +63,8 @@ func main() {
 
 	ui.Bind("joinVoiceGO", joinVoice)
 	ui.Bind("disconnectVoiceGO",disconnectVoice)
+	ui.Bind("recieveFileGO",recieveFile)
+	ui.Bind("displayFilesGO", displayFiles)
 
 	if !loadDiscord() {
 		ui.Load("http://127.0.0.1:4242/public/login")
@@ -72,4 +74,7 @@ func main() {
 
 	<-ui.Done()
 	Client.Close()
+	if Voice != nil{
+		Voice.Disconnect()
+	}
 }
