@@ -49,7 +49,7 @@ class Voice {
   }
 
   ReadFile () {
-    recieveFileGO(`./audio/${this.Selector.value}`)
+    recieveFileGO(this.Selector.value)
   }
 
   async Disconnect () {
