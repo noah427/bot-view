@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
@@ -35,7 +37,7 @@ func main() {
 		if err != nil {
 			fmt.Println(err)
 		}
-		
+
 		return channels
 	})
 
@@ -62,8 +64,8 @@ func main() {
 	})
 
 	ui.Bind("joinVoiceGO", joinVoice)
-	ui.Bind("disconnectVoiceGO",disconnectVoice)
-	ui.Bind("recieveFileGO",recieveFile)
+	ui.Bind("disconnectVoiceGO", disconnectVoice)
+	ui.Bind("recieveFileGO", recieveFile)
 	ui.Bind("displayFilesGO", displayFiles)
 
 	if !loadDiscord() {
@@ -72,9 +74,16 @@ func main() {
 		ui.Load("http://127.0.0.1:4242/public")
 	}
 
-	<-ui.Done()
+	sigc := make(chan os.Signal)
+	signal.Notify(sigc, os.Interrupt)
+
+	select {
+	case <-sigc:
+	case <-ui.Done():
+	}
+	
 	Client.Close()
-	if Voice != nil{
+	if Voice != nil {
 		Voice.Disconnect()
 	}
 }

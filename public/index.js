@@ -16,6 +16,7 @@ class Voice {
     e.classList.add('voice')
     e.append(this.DisconnectButton())
     e.append(await this.Dropdown())
+    e.append(this.PlayButton())
     return e
   }
 
@@ -31,6 +32,7 @@ class Voice {
 
   DropdownItem (filename) {
     var e = document.createElement('option')
+    e.classList.add("fileName")
     e.value = filename
     e.innerHTML = filename
     return e
@@ -43,8 +45,17 @@ class Voice {
     for (let name of names) {
       e.append(this.DropdownItem(name))
     }
-    e.onchange = this.ReadFile.bind(this)
     this.Selector = e
+    return e
+  }
+
+  PlayButton(){
+    var e = document.createElement("div")
+    e.id = "playAudio"
+    var text = document.createElement('p')
+    text.innerHTML = 'Play'
+    e.append(text)
+    e.onclick = this.ReadFile.bind(this)
     return e
   }
 
@@ -150,6 +161,8 @@ class Channel {
   }
 
   async loadVoice () {
+    state = undefined
+    refresh = undefined
     await joinVoiceGO(this.Guild, this.ID)
     document.getElementById('messages').innerHTML = ''
     var voice = new Voice(this)

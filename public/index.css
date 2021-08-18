@@ -92,12 +92,10 @@ html {
   padding-left: 5vw;
 }
 
-
 .userinfo {
   display: flex;
   align-items: center;
 }
-
 
 .attachment {
   max-width: 50%;
@@ -150,13 +148,18 @@ html {
   margin-top: 20vh;
   align-content: center;
   justify-content: center;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  gap: 1vw 1vw;
 }
 
-#audioSelector{
+#audioSelector {
   width: 25%;
   height: 25%;
-  font-size: 1vmax;
+  font-size: 2vmax;
   background-color: #23272a;
+  border: 1px solid black;
 }
 
 .disconnect {
@@ -165,6 +168,20 @@ html {
   text-align: center;
   background-color: #23272a;
   font-size: 2.5vmax;
+  border: 1px solid black;
+}
+
+.fileName{
+  font-size: 1vmax;
+}
+
+#playAudio {
+  width: 25%;
+  height: 25%;
+  text-align: center;
+  background-color: #23272a;
+  font-size: 2.5vmax;
+  border: 1px solid black;
 }
 
 /* @font-face {
