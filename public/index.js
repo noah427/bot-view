@@ -203,7 +203,7 @@ class Guild {
     var channels = await channelsGO(this.ID)
     for (let c of channels) {
       var channel = new Channel(c)
-      if (c.type == 'topic') continue
+      if (c.type == 4) continue
       document.getElementById('channels').append(channel.Element)
     }
   }
